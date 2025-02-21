@@ -49,20 +49,21 @@ ALGORITHM 1: COMPLEXITY ANALYSIS
             The loop executes n times, where n is the number of parent attacks.
             Inside the loop, there's a single multiplication operation, which takes constant time, O(1).
         The overall computational complexity of Algorithm 1 for a single node is O(n), which is linear with respect to the number of parent attacks on the node.
-            In the worst case, each node could have a number of parents that are proportional to V.
-        Therefore each node will have a complexity of O(V) in the worst case.
+            In the worst case, each node could have a number of parents that are proportional to the number of edges E.
+        Therefore each node will have a complexity of O(E) in the worst case.
 
     GRAPH TRAVERSAL AND NODE PROCESSING:
         To calculate the conditional probabilities for the entire graph, traversing it is required.
+        When the graph is traversed using DFS or BFS, each node and its edges are processed.
+        Algorithm 1's complexity is O(n), where 'n' is the number of parent attacks.
+        Therefore, the total work done by Algorithm 1 across all nodes is proportional to the total number of edges in the graph.
+        Therefore the total complexity of Algorithm 1 over the whole graph is O(V+E).
 
-        For a standard graph traversal algorithm like Depth-First Search (DFS) or Breadth-First Search (BFS), the traversal itself has a complexity of O(V + E), where:
-            V is the number of vertices (attack states).
-            E is the number of edges (dependencies).
-
-        Moreover, O(V) is ran  for each of the V vertices, 
-    The overall complexity of calculating conditional probabilities for all nodes, considering Algorithm 1's O(V) contribution and the graph traversal, is O(V * (V + E)).
-
-
+    SUMMARY:
+        Algorithm1's complexity is  O(V + E)
+        The O(V) part comes from visiting each node once during the graph traversal.
+        The O(E) part accounts for processing the edges (each parent-node relationship once) when applying Algorithm 1.
+        
 
 
 
