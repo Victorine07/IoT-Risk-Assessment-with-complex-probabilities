@@ -1,16 +1,88 @@
+### CORRECTNESS ANALYSIS: step-by-step reasoning
 
-Algorithm 2: OR MI Conditional Probability
-Input: Local Static M ILS of attack sn :
-MILS(sn) = c; MI of Parent attacks of attack
-sn: MIpa
-Output: Conditional MI of sn resulting from an OR
-join-type of parent attacks MIpa MI(sn) = MILS(sn)
-∪spa = M Ipa [0]
-for i in (1, MIpa) do
-∩spa = ∪spa · MIpa[i]
-exclusion1 = ∪spa − ∩spa
-exclusion2 = MIpa[i] − ∩spa
-∪spa = exclusion1 + ∩spa + exclusion2
-end
-MI(sn) = MI(sn) · MI(sn) + ∪s  pa
-return M I (sn )
+Algorithm 2: "OR" Misuse Impact (MI) Conditional Probability
+    Input: Local Static MI_LS of attack sn : MI_LS(sn) = c; MI of Parent attacks of attack sn: MIpa
+    Output: Conditional MI of sn resulting from an OR join-type of parent attacks MIpa 
+    1. MI(sn) = MI_LS(sn)
+    2. if MIpa is not empty:
+    3.   UNION_spa = MIpa[0]
+    4.   for i in (1, MIpa) do
+    5.     INTERSECT_spa = UNION_spa * MIpa[i]
+    6.     exclusion1 = UNION_spa − INTERSECT_spa
+    7.     exclusion2 = MIpa[i] − INTERSECT_spa
+    8.     UNION_spa = exclusion1 + INTERSECT_spa + exclusion2
+    9.   end
+   10. MI(sn) = MI(sn) * (MI(sn) + UNION_spa)
+   11. return MI(sn )
+
+CORRECTNESS DEFINITION:
+    The algorithm should correctly compute the conditional impact of attack sn given that at least one of its parent attacks MIpa has 
+    occurred, while also effectively managing the impact of cycles.
+
+ALGORITHM 1: CORRECTNESS ANALYSIS
+    INITIALIZATION (Lines 1-3):
+        Line 1: MI(sn) = MI_LS(sn): correct initialization of the MI of sn with its local static impact. This sets the baseline for the node's impact.
+        Line 3: UNION_spa = MIpa[0]: correct initialization of the UNION_spa with the impact of the first parent. This sets the initial combined impact.
+        These set the initial values for the calculation of the cumulative parent impact.
+
+    INCLUSION-EXCLUSION PRINCIPLE (Lines 4-9):
+        The for loop iterates through the remaining parent impacts in MIpa and correctly implements the inclusion-exclusion principle to calculate the union of the parent impacts (MIpa).
+          "UNION_spa" progressively stores the combined impact of the parents attacks of attack sn.
+          "INTERSECT_spa" calculates the intersection of the current "UNION_spa" and the next parent impact.
+          "exclusion1" and "exclusion2" calculate the exclusive parts of the impacts.
+          "INTERSECT_spa", "exclusion1" and "exclusion2" accurately determine the non-overlapping portions of the impacts.
+        This ensures that the combined impact of the parents is calculated correctly for an "OR" relationship, following the inclusion-exclusion principle.
+
+    IMPACT COMPUTATION AND CYCLE HANDLING (Line 10):
+        Line 10: MI(sn) = MI(sn) * (MI(sn) + UNION_spa): combines the node's local impact with the combined parent impact.
+        Dynamic Behavior:
+          When cycles occur, the MI(sn) values are recalculated with each cycle.
+          The initialization of MI(sn)=MI_LS(sn) term acts as a dampening factor, preventing indefinite growth.
+          The impact values converge to a stable state after a few cycles.
+        Justification:
+          The constant MI_LS(sn) acts as an anchor.
+          The changing UNION_spa values drive the dynamic adjustment.
+          The formula creates a feedback loop that leads to convergence.
+
+    RETURN VALUE (Line 11):
+        Line 11: return MI(sn): The algorithm returns the calculated conditional MI of sn.
+
+    Edge Cases and Considerations:
+        Empty MIpa: If MIpa is empty, Lines (2-10) are skipped, and the MI of sn remains MI_LS(sn), which is correct.
+        Zero Values: If any impact value is zero, the calculations are handled correctly through the inclusion-exclusion principle.
+        Real-World Context:
+          The algorithm models the propagation of impact in an attack graph.
+          The cycle-handling mechanism ensures that the impact values stabilize, reflecting the real-world behavior of attackers.
+
+
+
+
+
+Complexity Analysis:
+
+Loop Complexity (Lines 3-8):
+The loop iterates n - 1 times, where n is the number of parent impacts in MIpa.
+Inside the loop, there are a few constant-time operations (multiplication, subtraction, addition).
+Therefore, the loop's complexity is O(n).
+Line 9 Complexity:
+Line 9 involves a few constant-time arithmetic operations.
+Its complexity is O(1).
+Overall Complexity (Single Node):
+The overall complexity of Algorithm 2 for a single node is dominated by the loop, which is O(n).
+Graph Complexity:
+To compute the MI for all nodes in the graph, you'll need to traverse the graph (O(V + E)).
+For each node, you'll execute Algorithm 2, which has a complexity of O(n).
+In the worst case, 'n' (the number of parents) can be proportional to V.
+Therefore, the overall complexity of the algorithm is O(V * (V + E)).
+
+Key Observations:
+
+Cycle Handling:
+The formula in line 9 is the core mechanism for handling cycles. It ensures that the impact doesn't grow indefinitely.
+This handling of cycles does not change the Big O runtime complexity, but it does change the resulting values.
+Non-Standard Probability:
+The formula in line 9 is not a standard probability formula, it is a custom impact formula.
+Data Structure:
+The use of arrays for MIpa doesn't affect the asymptotic complexity.
+
+
