@@ -27,7 +27,7 @@ ALGORITHM 1: CORRECTNESS ANALYSIS
 
     INCLUSION-EXCLUSION PRINCIPLE (Lines 4-9):
         The for loop iterates through the remaining parent impacts in MIpa and correctly implements the inclusion-exclusion principle to calculate the union of the parent impacts (MIpa).
-          "UNION_spa" progressively stores the combined impact of the parents attacks of attack sn.
+          "UNION_spa" progressively stores the combined impact of the parent attacks of attack sn.
           "INTERSECT_spa" calculates the intersection of the current "UNION_spa" and the next parent impact.
           "exclusion1" and "exclusion2" calculate the exclusive parts of the impacts.
           "INTERSECT_spa", "exclusion1" and "exclusion2" accurately determine the non-overlapping portions of the impacts.
@@ -56,33 +56,29 @@ ALGORITHM 1: CORRECTNESS ANALYSIS
 
 
 
+### COMPLEXITY ANALYSIS:
+
+    Loop Complexity (Lines 4-9):
+        The loop iterates n - 1 times, where n is the number of parent impacts in MIpa.
+        Inside the loop, all operations are constant-time arithmetic operations.
+        Therefore, the complexity of the loop is O(n).
+
+    Line 9 Complexity:
+        Line 9 involves constant-time arithmetic operations, so its complexity is O(1).
+
+    Graph Complexity:
+        To compute the MI for all nodes in the graph, a graph traversal should be performed (O(V + E)).
+        For each node, Algorithm 2 O(n) is executed, with 'n', the number of parents for that node.
+        The sum of the number of parents for all nodes is equal to the number of edges (E).
+        Therefore, the overall complexity of Algorithm 2 when applied to the entire graph is O(V + E).
 
 
-Complexity Analysis:
+### KEY CONSIDERATIONS:
 
-Loop Complexity (Lines 3-8):
-The loop iterates n - 1 times, where n is the number of parent impacts in MIpa.
-Inside the loop, there are a few constant-time operations (multiplication, subtraction, addition).
-Therefore, the loop's complexity is O(n).
-Line 9 Complexity:
-Line 9 involves a few constant-time arithmetic operations.
-Its complexity is O(1).
-Overall Complexity (Single Node):
-The overall complexity of Algorithm 2 for a single node is dominated by the loop, which is O(n).
-Graph Complexity:
-To compute the MI for all nodes in the graph, you'll need to traverse the graph (O(V + E)).
-For each node, you'll execute Algorithm 2, which has a complexity of O(n).
-In the worst case, 'n' (the number of parents) can be proportional to V.
-Therefore, the overall complexity of the algorithm is O(V * (V + E)).
-
-Key Observations:
-
-Cycle Handling:
-The formula in line 9 is the core mechanism for handling cycles. It ensures that the impact doesn't grow indefinitely.
-This handling of cycles does not change the Big O runtime complexity, but it does change the resulting values.
-Non-Standard Probability:
-The formula in line 9 is not a standard probability formula, it is a custom impact formula.
-Data Structure:
-The use of arrays for MIpa doesn't affect the asymptotic complexity.
+    Cycle Handling:
+        The formula in line 10 is a custom formula to compute the impact of an attack sn, given the parent attacks.
+        The formula in line 10 is the core mechanism for handling cycles. It ensures that the impact doesn't grow indefinitely.
+        This handling of cycles does not change the Big O runtime complexity, but it does change the resulting values.
+        
 
 
