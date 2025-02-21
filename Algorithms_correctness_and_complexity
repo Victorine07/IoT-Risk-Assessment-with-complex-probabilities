@@ -11,24 +11,62 @@ ALGORITHM 1 : "AND" Misuse Frequency (MF) Conditional Probability 
 
 ALGORITHM 1: CORRECTNESS ANALYSIS
     ASSUMPTIONS:
+      - Probability Range: the values of MF_LS(sn) and MFpa are probabilities (between 0 and 1 inclusive), insuring the output: MF(sn) is also a probability between 0 and 1. 
+      - Zero Values: If any value in MFpa is 0, then the result MF(sn) will be 0. This is consistent with the "AND" logic, as the conditional probability is 0 if any parent attack has a probability of 0.
+
+    CORRECTNESS ANALYSIS:
+        Objective:  The algorithm should correctly compute the conditional probability of attack sn given that all its parent attacks MFpa have occurred. 
+                    This means the output MF(sn) should be the product of the local static probability MF_LS(sn) and the probabilities of all parent attacks in MFpa.
+
+        Proof of Correctness (using Loop Invariant):
+
+            Initialization:
+                MF(sn) is initialized to MF_LS(sn). This is correct because before the loop starts, we only have the local static probability.
+
+            Maintenance:
+                Let's define the loop invariant: "At the start of each iteration i, MF(sn) holds the product of MF_LS(sn) and the probabilities of the parent attacks: MFpa[0], MFpa[1], ..., MFpa[i-1]."
+                Before the first iteration (i=0), the invariant is true because MF(sn) = MF_LS(sn), which is the product of MF_LS(sn) and an empty set of parent probabilities.
+                In each iteration i, MF(sn) is multiplied by MFpa[i]. If the invariant was true before the iteration, it means MF(sn) already contained the product of MF_LS(sn) and 
+                    the previous parent probabilities. Multiplying it by MFpa[i] updates MF(sn) to include the current parent's probability, maintaining the invariant.
+
+            Termination:    
+                The loop terminates when i reaches the end of MFpa. At this point, the loop invariant states that MF(sn) holds the product of MF_LS(sn) and
+                    the probabilities of all parent attacks in MFpa. This is exactly what we want to compute.
+
+            Therefore, the algorithm correctly computes the conditional probability of attack sn given that all its parent attacks have occurred.
+
+Mathematical Representation: If we have n parent attacks in MFpa, the algorithm calculates:
+    MF(sn) = MF_LS(sn) * MFpa[0] * MFpa[1] * ... * MFpa[n-1]
+    This is the correct formula for the conditional probability when the parent attacks are combined using an "AND" relationship
+
+
+ALGORITHM 1: COMPLEXITY ANALYSIS
+    BACKTRACKING: When backtracking, the MF is not recomputed, as the vulnerability has already been exploited. 
+                  The complexity analysis will be done with the consideration of no computation in case of cycles 
+
+    ALGORITHM CORE OPERATION:
+        The algorithm iterates through the MFpa array, which contains the probabilities of the parent attacks.
+            The loop executes n times, where n is the number of parent attacks.
+            Inside the loop, there's a single multiplication operation, which takes constant time, O(1).
+        The overall computational complexity of Algorithm 1 for a single node is O(n), which is linear with respect to the number of parent attacks on the node.
+            In the worst case, each node could have a number of parents that are proportional to V.
+        Therefore each node will have a complexity of O(V) in the worst case.
+
+    GRAPH TRAVERSAL AND NODE PROCESSING:
+        To calculate the conditional probabilities for the entire graph, traversing it is required.
+
+        For a standard graph traversal algorithm like Depth-First Search (DFS) or Breadth-First Search (BFS), the traversal itself has a complexity of O(V + E), where:
+            V is the number of vertices (attack states).
+            E is the number of edges (dependencies).
+
+        Moreover, O(V) is ran  for each of the V vertices, 
+    The overall complexity of calculating conditional probabilities for all nodes, considering Algorithm 1's O(V) contribution and the graph traversal, is O(V * (V + E)).
 
 
 
-The algorithm should correctly compute the conditional probability of attack sn given that all its parent attacks MFpa have occurred. This means the output MF(sn) should be the product of the local static probability MF_LS(sn) and the probabilities of all parent attacks in MFpa.
 
-Proof of Correctness (using Loop Invariant):
 
-Initialization:
 
-MF(sn) is initialized to MF_LS(sn). This is correct because before the loop starts, we only have the local static probability.
-Maintenance:
-
-Let's define the loop invariant: "At the start of each iteration i, MF(sn) holds the product of MF_LS(sn) and the probabilities of the parent attacks MFpa[0], MFpa[1], ..., MFpa[i-1]."
-Before the first iteration (i=0), the invariant is true because MF(sn) = MF_LS(sn), which is the product of MF_LS(sn) and an empty set of parent probabilities.
-In each iteration i, MF(sn) is multiplied by MFpa[i]. If the invariant was true before the iteration, it means MF(sn) already contained the product of MF_LS(sn) and the previous parent probabilities. Multiplying it by MFpa[i] updates MF(sn) to include the current parent's probability, maintaining the invariant.
-Termination:
-
-The loop terminates when i reaches the end of MFpa. At this point, the loop invariant states that MF(sn) holds the product of MF_LS(sn) and the probabilities of all parent attacks in MFpa. This is exactly what we want to compute.
 
 
 
