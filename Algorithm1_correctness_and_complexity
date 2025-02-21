@@ -4,7 +4,7 @@ ALGORITHM 1 : "AND" Misuse Frequency (MF) Conditional Probability 
     Input: Local Static MF_LS of attack sn : MF_LS(sn); MF of Parent attacks of sn: MFpa 
     Output: conditional MF of attack sn resulting from AND join-type on its parent attacks MFpa
     1. MF(sn) = MF_LS(sn)
-    2. for I in MFpa do
+    2. for i in MFpa do
     3.   MF(sn) *= MFpa[I]
     4. end
     5. return MF(sn) 
