@@ -1,0 +1,16 @@
+
+Algorithm 2: OR MI Conditional Probability
+Input: Local Static M ILS of attack sn :
+MILS(sn) = c; MI of Parent attacks of attack
+sn: MIpa
+Output: Conditional MI of sn resulting from an OR
+join-type of parent attacks MIpa MI(sn) = MILS(sn)
+∪spa = M Ipa [0]
+for i in (1, MIpa) do
+∩spa = ∪spa · MIpa[i]
+exclusion1 = ∪spa − ∩spa
+exclusion2 = MIpa[i] − ∩spa
+∪spa = exclusion1 + ∩spa + exclusion2
+end
+MI(sn) = MI(sn) · MI(sn) + ∪s  pa
+return M I (sn )
