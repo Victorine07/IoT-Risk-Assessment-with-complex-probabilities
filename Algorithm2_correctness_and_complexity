@@ -67,10 +67,33 @@ ALGORITHM 1: CORRECTNESS ANALYSIS
         Line 9 involves constant-time arithmetic operations, so its complexity is O(1).
 
     Graph Complexity:
-        To compute the MI for all nodes in the graph, a graph traversal should be performed (O(V + E)).
-        For each node, Algorithm 2 O(n) is executed, with 'n', the number of parents for that node.
-        The sum of the number of parents for all nodes is equal to the number of edges (E).
-        Therefore, the overall complexity of Algorithm 2 when applied to the entire graph is O(V + E).
+        BEST CASE SCENARIO -- No cycles:
+            In a directed acyclic graph (DAG), the nodes are processed in topological order. 
+            The algorithm also shows that each node is processed only once, and the probabilities of the parent nodes should be computed before the child nodes. 
+            For each node, Algorithm 2 with O(n) runtime complexity is executed, with 'n': the number of parents for that node.
+            Summing over all nodes, the sum of the number of parents for all nodes is equal to the number of edges (E). The runtime is O(V+E), equivalent to a single pass through the DAG.
+                With each node and edge visited once, the total runtime is O(V+E), V: total number of nodes or vertices, and E: total number of edges in the DAG 
+                
+        WORST CASE SCENARIO -- Cyclic graph:
+            With cycles, the graph cannot be processed in a single pass; the probabilities should iteratively be updated until they stabilize
+            With the possibility of each node being revisited multiple times, the number of iterations for stabilizing cycles in a graph depends on the cycle length "c", and the number of cycles "k" in the graph
+
+
+            BOUNDING THE COMPLEXITY:
+                Let's consider a cycle containing c nodes and assume the probabilities for each node stabilize in O(c) iterations, then each node in the cycle is prcossed c times.
+                Let's consider a total of k cycles in the graph
+                => the computations for all the cycles are proportional to O(kc)
+
+            EMPIRICAL OBSERVATION: Faster Convergence
+                In practical IoT attack graphs, cycles are usually small. 
+                Moreover, with the established formula (Line 10), the MI probability converges with less than 10 iterations. (Dr Sen, this is based on the backtracking example with 2 nodes, but if there are more nodes, we don't really know; should I run some tests?)
+                => the computations for all the cycles are proportional to O(k*E), where E is a constant; thus proportional to O(k)
+
+            The overall runtime when cycles arise is therefore: O(V+E+k), 
+                V: number of nodes in the graph
+                E: number of edges in the graph
+                k: number of cycles in the graph
+
 
 
 ### KEY CONSIDERATIONS:
