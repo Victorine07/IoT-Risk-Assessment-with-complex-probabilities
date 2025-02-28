@@ -19,7 +19,7 @@ CORRECTNESS DEFINITION:
     The algorithm should correctly compute the conditional impact of attack sn given that at least one of its parent attacks MIpa has 
     occurred, while also effectively managing the impact of cycles.
 
-ALGORITHM 1: CORRECTNESS ANALYSIS
+ALGORITHM 2: CORRECTNESS ANALYSIS
     INITIALIZATION (Lines 1-3):
         Line 1: MI(sn) = MI_LS(sn): correct initialization of the MI of sn with its local static impact. This sets the baseline for the node's impact.
         Line 3: UNION_spa = MIpa[0]: correct initialization of the UNION_spa with the impact of the first parent. This sets the initial combined impact.
